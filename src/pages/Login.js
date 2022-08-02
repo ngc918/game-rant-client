@@ -1,80 +1,74 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
+
+const API_URL = "http://localhost:5005";
 
 const Login = () => {
-	const userRef = useRef();
-	const errRef = useRef();
+	const [email, setEmail] = useState("");
+	const [pwd, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState(undefined);
 
-	const [user, setUser] = useState("");
-	const [pwd, setPwd] = useState("");
-	const [errMsg, setErrMsg] = useState("");
-	const [success, setSuccess] = useState(false);
+	const navigate = useNavigate();
 
-	useEffect(() => {
-		userRef.current.focus();
-	}, []);
+	/*  UPDATE - get authenticateUser from the context */
+	const { storeToken, authenticateUser } = useContext(AuthContext);
 
-	useEffect(() => {
-		setErrMsg("");
-	}, [user, pwd]);
+	const emailHandler = (e) => setEmail(e.target.value);
+	const handlePwd = (e) => setPassword(e.target.value);
 
-	const handleSubmit = async (e) => {
+	const handleLoginSubmit = (e) => {
 		e.preventDefault();
-		console.log(user, pwd);
-		setUser("");
-		setPwd("");
-		setSuccess(true);
+		const requestBody = { email, pwd };
+
+		axios
+			.post(`${API_URL}/auth/login`, requestBody)
+			.then((response) => {
+				console.log("JWT token", response.data.authToken);
+
+				// Save the token in the localStorage.
+				storeToken(response.data.authToken);
+
+				// Verify the token by sending a request
+				// to the server's JWT validation endpoint.
+				authenticateUser(); // <== ADD
+				navigate("/");
+			})
+			.catch((error) => {
+				const errorDescription = error.response.data.message;
+				setErrorMessage(errorDescription);
+			});
 	};
 
 	return (
-		<>
-			{success ? (
-				<div>
-					<h1>You're logged in!</h1>
-					<br />
-					<p>
-						<a href="#">Go to Home</a>
-					</p>
-				</div>
-			) : (
-				<div>
-					<p
-						ref={errRef}
-						className={errMsg ? "errmsg" : "offscreen"}
-						aria-live="assertive"
-					>
-						{errMsg}
-					</p>
-					<h1>Sign in</h1>
-					<form onSubmit={handleSubmit}>
-						<label htmlFor="username">Username:</label>
-						<input
-							type="text"
-							id="username"
-							ref={userRef}
-							autoComplete="off"
-							onChange={(e) => setUser(e.target.value)}
-							value={user}
-							required
-						></input>
-						<label htmlFor="password">Password:</label>
-						<input
-							type="password"
-							id="password"
-							onChange={(e) => setPwd(e.target.value)}
-							value={pwd}
-							required
-						></input>
-						<button>Sign In</button>
-					</form>
-					<p>
-						Don't have an account?
-						<span className="line">
-							<a href="#">Sign Up</a>
-						</span>
-					</p>
-				</div>
-			)}
-		</>
+		<div className="LoginPage">
+			<h1>Login</h1>
+
+			<form onSubmit={handleLoginSubmit}>
+				<label>Email:</label>
+				<input
+					type="email"
+					name="email"
+					value={email}
+					onChange={emailHandler}
+				/>
+
+				<label>Password:</label>
+				<input
+					type="password"
+					name="password"
+					value={pwd}
+					onChange={handlePwd}
+				/>
+
+				<button type="submit">Login</button>
+			</form>
+			{errorMessage && <p className="error-message">{errorMessage}</p>}
+
+			<p>Don't have an account yet?</p>
+			<Link to={"/signup"}> Sign Up</Link>
+		</div>
 	);
 };
 
