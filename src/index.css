@@ -16,3 +16,15 @@ body {
 	padding: 0 1rem;
 	height: 4rem;
 }
+
+.container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 1rem;
+	margin-top: 1rem;
+	border-radius: 1rem;
+}
+
+.game-name {
+	text-decoration: none;
+}
