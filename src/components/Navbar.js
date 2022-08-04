@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react"; // <== IMPORT
 import { AuthContext } from "../context/auth.context"; // <== IMPORT
+import SearchBar from "./SearchBar";
 
 function Navbar() {
 	// Subscribe to the AuthContext to gain access to
@@ -14,10 +15,10 @@ function Navbar() {
 			<Link to="/" className="navbar-brand text-white">
 				Game Rant
 			</Link>
-			<form class="input-group w-auto">
+			{/* <form class="input-group w-auto">
 				<input
 					type="search"
-					class="form-control rounded"
+					class="form-control rounded flex-grow-1"
 					placeholder="Search"
 					aria-label="Search"
 					aria-describedby="search-addon"
@@ -25,29 +26,31 @@ function Navbar() {
 				<span class="input-group-text border-0" id="search-addon">
 					<i class="fas fa-search"></i>
 				</span>
-			</form>
-			{/*    UPDATE     */}
-			{isLoggedIn && (
-				<>
-					<button onClick={logOutUser} className="btn-primary">
-						Logout
-					</button>
-					<span>{User && User.name}</span>
-				</>
-			)}
+			</form> */}
+			<SearchBar />
+			<div>
+				{isLoggedIn && (
+					<>
+						<button onClick={logOutUser} className="btn-primary">
+							Logout
+						</button>
+						<span>{User && User.name}</span>
+					</>
+				)}
 
-			{!isLoggedIn && (
-				<>
-					<Link to="/signup">
-						{" "}
-						<button>Sign Up</button>{" "}
-					</Link>
-					<Link to="/login">
-						{" "}
-						<button className="">Login</button>{" "}
-					</Link>
-				</>
-			)}
+				{!isLoggedIn && (
+					<>
+						<Link to="/signup">
+							{" "}
+							<button>Sign Up</button>{" "}
+						</Link>
+						<Link to="/login">
+							{" "}
+							<button className="">Login</button>{" "}
+						</Link>
+					</>
+				)}
+			</div>
 		</nav>
 	);
 }

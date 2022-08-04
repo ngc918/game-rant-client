@@ -46,7 +46,7 @@ function Home() {
 						);
 					})}
 			</div>
-			<div>
+			<div className="page-button">
 				<button
 					onClick={() => {
 						if (page <= 1) {

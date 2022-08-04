@@ -4,6 +4,9 @@
 
 body {
 	margin: 0;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+		url("../public/hzd-background.jpg");
+	background-size: cover;
 }
 
 .nav {
@@ -27,4 +30,22 @@ body {
 
 .game-name {
 	text-decoration: none;
+}
+
+.LoginPage {
+	justify-content: center;
+	align-items: center;
+}
+
+.page-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.page-button span {
+	color: white;
+	margin: 0 10px 0 10px;
 }
