@@ -18,7 +18,7 @@ function Register(props) {
 		const requestBody = { email, pwd };
 
 		axios
-			.post(`${API_URL}/auth/register`, requestBody)
+			.post(`${API_URL}/auth/signup`, requestBody)
 			.then((response) => {
 				console.log(response);
 				navigate("/login");
