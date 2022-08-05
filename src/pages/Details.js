@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import CommentSection from "../components/Comment";
 
 function GameDetails(props) {
 	const [gameInfo, setGameInfo] = useState([]);
@@ -34,12 +35,22 @@ function GameDetails(props) {
 	// 	console.log(gameFound);
 	// }, [gameId, gameInfo]);
 	return (
-		<div style={{ color: "white", fontSize: "36px" }}>
-			<h1>{gameInfo.name}</h1>
-			<img src={gameInfo.background_image} />
-			{gameInfo.released}
-			<span>{gameInfo.description}</span>
-			{gameInfo.rating}/{gameInfo.rating_top}
+		<div style={{ color: "white", fontSize: "36px" }} className="details-page">
+			<div className="details-title">
+				<h1>{gameInfo.name}</h1>
+			</div>
+			<div className="d-flex justify-content-around">
+				<p>
+					Rating: {gameInfo.rating}/{gameInfo.rating_top}
+				</p>
+				<p>Release Date: {gameInfo.released}</p>
+			</div>
+			<div className="details-img">
+				<img src={gameInfo.background_image} className="game_image" alt="" />
+			</div>
+			<p>About:</p>
+			<div className="description">{gameInfo.description_raw}</div>
+			{<CommentSection />}
 		</div>
 	);
 }

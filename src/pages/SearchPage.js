@@ -2,28 +2,34 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-function Home() {
+function SearchPage() {
 	const [games, setGames] = useState();
-	const [page, setPage] = useState(1);
+	const [search, setSearch] = useState("");
 
-	useEffect(() => {
+	const searchForGames = () => {
 		axios
 			.get(
-				`https://api.rawg.io/api/games?key=ecb4bb7bdcf2401f9dd28e3f806807a0&page=${page}`
+				`https://api.rawg.io/api/games?key=ecb4bb7bdcf2401f9dd28e3f806807a0&search=${search}`
 			)
 			.then((response) => {
 				console.log(response);
-				const images = response.data.results.map((backgroundImage) => {
-					return backgroundImage.background_image;
-				});
 				setGames(response);
-				console.log(images[0]);
 			})
 			.catch((err) => console.log(err));
-	}, [page]);
-	console.log(games);
+	};
+
 	return (
 		<>
+			<div>
+				<input
+					type="text"
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+					placeholder="Search"
+					className="search-bar"
+				></input>
+				<button onClick={searchForGames}>Search</button>
+			</div>
 			<div className="container">
 				{games &&
 					games.data.results.map((gameInfo) => {
@@ -41,37 +47,14 @@ function Home() {
 											borderRadius: "1rem",
 										}}
 									></div>
-									<div className="game-name">{gameInfo.name}</div>
+									<div className="game-name-results">{gameInfo.name}</div>
 								</div>
 							</Link>
 						);
 					})}
 			</div>
-			<div className="page-button">
-				<button
-					className="btn btn-light"
-					onClick={() => {
-						if (page <= 1) {
-							setPage(1);
-						} else {
-							setPage(page - 1);
-						}
-					}}
-				>
-					Previous
-				</button>
-				<span>{page}</span>
-				<button
-					className="btn btn-light"
-					onClick={() => {
-						setPage(page + 1);
-					}}
-				>
-					Next
-				</button>
-			</div>
 		</>
 	);
 }
 
-export default Home;
+export default SearchPage;

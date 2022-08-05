@@ -43,9 +43,8 @@ const Login = () => {
 
 	return (
 		<div className="LoginPage">
-			<h1>Login</h1>
-
 			<form onSubmit={handleLoginSubmit}>
+				<h1>Login</h1>
 				<label>Email:</label>
 				<input
 					type="email"
@@ -62,12 +61,19 @@ const Login = () => {
 					onChange={handlePwd}
 				/>
 
-				<button type="submit">Login</button>
+				<button
+					type="submit"
+					className="btn btn-light"
+					data-mdb-ripple-color="dark"
+				>
+					Login
+				</button>
+				{errorMessage && <p className="error-message">{errorMessage}</p>}
+				<div className="d-flex">
+					<p>Don't have an account yet?</p>
+					<Link to={"/signup"}> Sign Up</Link>
+				</div>
 			</form>
-			{errorMessage && <p className="error-message">{errorMessage}</p>}
-
-			<p>Don't have an account yet?</p>
-			<Link to={"/signup"}> Sign Up</Link>
 		</div>
 	);
 };

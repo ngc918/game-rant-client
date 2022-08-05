@@ -33,11 +33,10 @@ function Register(props) {
 	};
 
 	return (
-		<div className="SignupPage">
-			<h1>Sign Up</h1>
-
-			<form onSubmit={submitHandler}>
-				<label>Email:</label>
+		<div className="signupPage">
+			<form onSubmit={submitHandler} className="">
+				<h1>Register</h1>
+				<label>Email: </label>
 				<input
 					type="email"
 					name="email"
@@ -45,19 +44,27 @@ function Register(props) {
 					onChange={emailHandler}
 				/>
 
-				<label>Password:</label>
+				<label>Password: </label>
 				<input
 					type="password"
 					name="password"
 					value={pwd}
 					onChange={pwdHandler}
 				/>
-				<button type="submit">Register</button>
-			</form>
 
-			{errMsg && <p className="error-msg">{errMsg}</p>}
-			<p>Already have account?</p>
-			<Link to={"/login"}>Login</Link>
+				<button
+					type="submit"
+					className="btn btn-light"
+					data-mdb-ripple-color="dark"
+				>
+					Register
+				</button>
+				{errMsg && <p className="error-msg">{errMsg}</p>}
+				<div className="d-flex">
+					<p>Already have account?</p>
+					<Link to={"/login"}>Login</Link>
+				</div>
+			</form>
 		</div>
 	);
 }

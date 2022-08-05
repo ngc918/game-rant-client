@@ -9,7 +9,7 @@ const Results = (props) => {
 					<li key={game.id}>
 						<Link
 							to={{
-								pathname: `/game/${game.name}`,
+								pathname: `/game/${game.id}`,
 								gameProps: {
 									game: game,
 								},
