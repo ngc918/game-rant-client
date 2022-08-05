@@ -2,11 +2,24 @@ import axios from "axios";
 import { createContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CommentSection from "../components/Comment";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function GameDetails(props) {
 	const [gameInfo, setGameInfo] = useState([]);
 	const { gameId } = useParams();
 	console.log(gameId);
+	const [comment, setComment] = useState("");
+	const [commentArray, setCommentArray] = useState([]);
+
+	const getGameComments = () => {
+		axios
+			.get(`${API_URL}/comments/game-comments/${gameId}`)
+			.then((response) => {
+				setCommentArray(response.data.commentsArray);
+			})
+			.catch((err) => console.log(err));
+	};
+
 	useEffect(() => {
 		if (gameId) {
 			axios
@@ -23,17 +36,31 @@ function GameDetails(props) {
 				.catch((err) => console.log(err));
 		}
 	}, [gameId]);
-	// useEffect(() => {
-	// 	const game = gameInfo.find((gameObject) => {
-	// 		console.log(gameObject);
-	// 		return gameObject.id === gameId;
-	// 	});
-	// 	console.log(game);
-	// 	if (game) {
-	// 		setGameFound(game);
-	// 	}
-	// 	console.log(gameFound);
-	// }, [gameId, gameInfo]);
+	useEffect(() => {
+		axios
+			.get(`${API_URL}/comments/game-comments/${gameId}`)
+			.then((response) => {
+				setCommentArray(response.data.commentsArray);
+			})
+			.catch((err) => console.log(err));
+	}, [gameId]);
+	const handleCommentSubmit = (e) => {
+		const storedToken = localStorage.getItem("authToken");
+		e.preventDefault();
+		axios
+			.post(
+				`${API_URL}/comments/new-comment/${gameId}`,
+				{ content: comment },
+				{
+					headers: {
+						Authorization: `Bearer ${storedToken}`,
+					},
+				}
+			)
+			.then((response) => {
+				getGameComments();
+			});
+	};
 	return (
 		<div style={{ color: "white", fontSize: "36px" }} className="details-page">
 			<div className="details-title">
@@ -50,7 +77,14 @@ function GameDetails(props) {
 			</div>
 			<p>About:</p>
 			<div className="description">{gameInfo.description_raw}</div>
-			{<CommentSection />}
+			{
+				<CommentSection
+					commentArray={commentArray}
+					comment={comment}
+					setComment={setComment}
+					handleCommentSubmit={handleCommentSubmit}
+				/>
+			}
 		</div>
 	);
 }
